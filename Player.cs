@@ -8,9 +8,10 @@ namespace mtgSimulat
 {
     public class Player
     {
-        public float aggresive;
+        public float aggressiveness;
         public float deffensive;
         public float conservative;
+        public float desperation;
 
         // agressive players are constantly on the offense. Once an aggressive player gets a card, they play it.
         // deffensive players constantly respond to what an opponent is doind (couter decks for example).

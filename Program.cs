@@ -8,7 +8,7 @@ namespace mtgSimulat
 {
     public static class Shared
     {
-        public static Game newGame;
+        public static Game game;
     }
 
     class Program
@@ -24,7 +24,7 @@ namespace mtgSimulat
                 line = Console.ReadLine(); //wait for text to generate all sentences file
                 if (line == "start")
                 {
-                    Shared.newGame = new Game();
+                    Shared.game = new Game();
 
                     Player p1 = makeDummyPlayer();
                     Player p2 = makeDummyPlayer();
@@ -36,11 +36,11 @@ namespace mtgSimulat
                     d2.printDeck();
 
                     // Stitch them together
-                    p1.deck = d1;
-                    p2.deck = d2;
+                    p1.playerDeck = d1;
+                    p2.playerDeck = d2;
 
-                    Shared.newGame.AddPlayer(p1);
-                    Shared.newGame.AddPlayer(p2);
+                    Shared.game.AddPlayer(p1);
+                    Shared.game.AddPlayer(p2);
                 }
                 
                 line = "";
@@ -51,7 +51,7 @@ namespace mtgSimulat
         {
             //for debugging purposes we make a character like this
             Player player = new Player();
-            player.aggresive = 0.7F;
+            player.aggressiveness = 0.7F;
             player.conservative = 0.1F;
             player.deffensive = 0.2F;
 
