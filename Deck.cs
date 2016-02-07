@@ -9,5 +9,13 @@ namespace mtgSimulat
     public class Deck
     {
         public List<Card> deck = new List<Card>();
+
+        public void printDeck()
+        {
+            foreach (Card card in deck)
+            {
+                card.printCard();
+            }
+        }
     }
 }

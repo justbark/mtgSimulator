@@ -15,15 +15,47 @@ namespace mtgSimulat
     {
         static void Main(string[] args)
         {
+            //=======================================================================================
+            //gets user input
+            //=======================================================================================
+            string line = "";
+            while (line != "exit" && line != "quit" && line != "q")
+            {
+                line = Console.ReadLine(); //wait for text to generate all sentences file
+                if (line == "start")
+                {
+                    Shared.newGame = new Game();
+
+                    Player p1 = makeDummyPlayer();
+                    Player p2 = makeDummyPlayer();
+
+                    Deck d1 = makeDummyDeck();
+                    Deck d2 = makeDummyDeck();
+
+                    d1.printDeck();
+                    d2.printDeck();
+
+                    // Stitch them together
+                    p1.deck = d1;
+                    p2.deck = d2;
+
+                    Shared.newGame.AddPlayer(p1);
+                    Shared.newGame.AddPlayer(p2);
+                }
+                
+                line = "";
+            }
         }
 
-        public void makeDummyPlayer()
+        public Player makeDummyPlayer()
         {
             //for debugging purposes we make a character like this
             Player player = new Player();
             player.aggresive = 0.7F;
             player.conservative = 0.1F;
             player.deffensive = 0.2F;
+
+            return player;
         }
 
         public Card makeDummyCard()
@@ -47,7 +79,7 @@ namespace mtgSimulat
             return card;
             
         }
-        public void makeDummyDeck()
+        public Deck makeDummyDeck()
         {
             Deck newDeck = new Deck();
             Random rand = new Random();
@@ -57,6 +89,9 @@ namespace mtgSimulat
             {
                newDeck.deck.Add(makeDummyCard());
             }
+
+            return newDeck;
         }
+        
     }
 }
