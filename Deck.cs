@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace mtgSimulat
 {
-    class Deck
+    public class Deck
     {
         public List<Card> deck = new List<Card>();
     }
