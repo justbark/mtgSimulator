@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace mtgSimulat
 {
-    class Hand
+    public class Hand
     {
-        public List<Card> hand = new List<Card>();
+        List<Card> hand = new List<Card>();
 
     }
 }

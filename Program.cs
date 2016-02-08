@@ -47,7 +47,7 @@ namespace mtgSimulat
             }
         }
 
-        public Player makeDummyPlayer()
+        public static Player makeDummyPlayer()
         {
             //for debugging purposes we make a character like this
             Player player = new Player();
@@ -79,7 +79,7 @@ namespace mtgSimulat
             return card;
             
         }
-        public Deck makeDummyDeck()
+        public static Deck makeDummyDeck()
         {
             Deck newDeck = new Deck();
             Random rand = new Random();

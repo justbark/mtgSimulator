@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace mtgSimulat
 {
-    class Card
+    public class Card
     {
         public string cardName;       //stores the name of the card
         public string manaColor;      //stores the color of mana needed to play card

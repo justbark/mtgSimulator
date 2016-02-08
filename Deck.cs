@@ -8,7 +8,7 @@ namespace mtgSimulat
 {
     public class Deck
     {
-        public List<Card> deck = new List<Card>();
+        List<Card> deck = new List<Card>();
 
         public void printDeck()
         {
