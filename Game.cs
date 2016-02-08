@@ -13,29 +13,58 @@ namespace mtgSimulat
 
         public void Start()
         {
+            //make sure the game is valid
             if (!isValidGame())
             {
                 Console.WriteLine("not a valid number of players");
                 return;
             }
-            Console.WriteLine("cvalid number of players. Beginning game");
+            Console.WriteLine("valid number of players. Beginning game");
 
 
-            //need to draw a hand 
-            int handSize = 7;
-            foreach (Player p in players)
+            //need to figure out who goes first. (first player draws 7, the rest draw 8)
+            foreach (Player p in players)   //each player needs to roll
             {
-                Deck currentDeck = p.playerDeck;
-                for (int i = 0; i < handSize; i++)
+                roll(p);
+            }
+            int highestRes = 0;            // setting a standard number for each player to check and see if their roll result was higher
+            foreach (Player p in players)     // each player compares their roll result
+            {
+                if (p.rollRes > highestRes)    // if current player has the highest roll result
                 {
-                    Card currentCard = currentDeck[0];
+                    highestRes += p.rollRes;     // set the highest result to the player with the highest result
                 }
             }
+            
+            foreach (Player p in players)    //each player now needs to draw a hand
+            {
+                if (p.rollRes == highestRes)     //if this player has the highest roll result
+                {
+                    //this player goes first because their roll result was higher
+                    // this player draws 7
+                    p.handSize = 7;
+                    Console.WriteLine("player " + players.IndexOf(p) + "has first turn, drawing 7");
+                }
+                else                  // this player does not have the highest roll amount
+                {
+                    p.handSize = 8;      // so this player does not draw seven, they draw 8
+                    Console.WriteLine("player " + players.IndexOf(p) + "did not win the roll, drawing 8");
+                }
+                Console.WriteLine("drawing hand for " + players.IndexOf(p));   //trying to display what player is getting a hand. This might be wrong
+                Deck currentDeck = p.playerDeck;
+                Hand currentHand = p.playerHand;
+                for (int i = 0; i < p.handSize; i++)     //draw 7 cards from players deck
+                {
+                    Card currentCard = currentDeck.cards[i];   //grab a card from deck
+                    currentHand.hand.Add(currentCard);        // put this card in hand
+                    currentDeck.cards.Remove(currentCard);   // remove this card from player deck
+                }
+            }
+            
 
 
             //check and see if this game is started.
             bool won = false;
-              
             while (won == false)
             {
                 foreach (Player p in players)
@@ -70,12 +99,20 @@ namespace mtgSimulat
             return false;
         }
 
+        //add a player object generated in program.cs to list of players
         public void AddPlayer(Player currentPlayer)
         {
             players.Add(currentPlayer);
             // add a player to list of players
         }
 
+        //probably need to roll to figure out what player goes first...
+        public void roll(Player p)
+        {
+            Random rand = new Random();
+            int rollD20 = rand.Next(1, 20);
+            p.rollRes = rollD20;
+        }
 
         //=======================================================================
         //Phase stuff

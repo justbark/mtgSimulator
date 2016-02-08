@@ -8,11 +8,11 @@ namespace mtgSimulat
 {
     public class Deck
     {
-        List<Card> deck = new List<Card>();
+        public List<Card> cards = new List<Card>();
 
         public void printDeck()
         {
-            foreach (Card card in deck)
+            foreach (Card card in cards)
             {
                 card.printCard();
             }

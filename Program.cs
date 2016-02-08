@@ -58,7 +58,7 @@ namespace mtgSimulat
             return player;
         }
 
-        public Card makeDummyCard()
+        public static Card makeDummyCard()
         {
             //for debugging purposes we make VERY basic cards
             Random rand = new Random();
@@ -79,15 +79,29 @@ namespace mtgSimulat
             return card;
             
         }
+        public static Card makeDummyLands()
+        {
+            Card card = new Card();
+            card.cardName = "Land";
+            card.manaColor = "green";
+
+            return card;
+        }
         public static Deck makeDummyDeck()
         {
             Deck newDeck = new Deck();
             Random rand = new Random();
-            int n = rand.Next(60, 70);
+            int n = rand.Next(50, 60);
 
             for (int i = 0; i < n; i++)
             {
-               newDeck.deck.Add(makeDummyCard());
+               newDeck.cards.Add(makeDummyCard());
+            }
+
+            int n_mana = rand.Next(10, 15);
+            for (int i = 0; i < n_mana; i++)
+            {
+                newDeck.cards.Add(makeDummyLands());
             }
 
             return newDeck;

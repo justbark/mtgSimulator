@@ -13,6 +13,8 @@ namespace mtgSimulat
         public float conservative;
         public float desperation;
 
+        public int rollRes;
+        public int handSize;
         public int health;
         public int infect;
 
