@@ -9,6 +9,7 @@ namespace mtgSimulat
     public static class Shared
     {
         public static Game game;
+        public static Random rand;
     }
 
     class Program
@@ -18,6 +19,7 @@ namespace mtgSimulat
             //=======================================================================================
             //gets user input
             //=======================================================================================
+            Shared.rand = new Random();
             string line = "";
             while (line != "exit" && line != "quit" && line != "q")
             {
@@ -36,11 +38,13 @@ namespace mtgSimulat
                     d2.printDeck();
 
                     // Stitch them together
-                    p1.playerDeck = d1;
-                    p2.playerDeck = d2;
+                    p1.deck = d1;
+                    p2.deck = d2;
 
                     Shared.game.AddPlayer(p1);
                     Shared.game.AddPlayer(p2);
+
+                    Shared.game.Start();
                 }
                 
                 line = "";
@@ -61,11 +65,11 @@ namespace mtgSimulat
         public static Card makeDummyCard()
         {
             //for debugging purposes we make VERY basic cards
-            Random rand = new Random();
-            int randAtk = rand.Next(0, 5);
-            int randDef = rand.Next(0, 5);
-            int randConvertedMana = rand.Next(0, 4);
-            int randColorCost = rand.Next(0, 4);
+            
+            int randAtk = Shared.rand.Next(1, 5);
+            int randDef = Shared.rand.Next(1, 5);
+            int randConvertedMana = Shared.rand.Next(1, 4);
+            int randColorCost = Shared.rand.Next(1, 4);
 
             Card card = new Card();
             card.cardName = "dummy card";
@@ -84,21 +88,21 @@ namespace mtgSimulat
             Card card = new Card();
             card.cardName = "Land";
             card.manaColor = "green";
+            card.cardType = "mana";
 
             return card;
         }
         public static Deck makeDummyDeck()
         {
             Deck newDeck = new Deck();
-            Random rand = new Random();
-            int n = rand.Next(50, 60);
+            int n = Shared.rand.Next(50, 60);
 
             for (int i = 0; i < n; i++)
             {
                newDeck.cards.Add(makeDummyCard());
             }
 
-            int n_mana = rand.Next(10, 15);
+            int n_mana = Shared.rand.Next(10, 15);
             for (int i = 0; i < n_mana; i++)
             {
                 newDeck.cards.Add(makeDummyLands());

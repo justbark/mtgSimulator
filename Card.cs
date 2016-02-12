@@ -15,14 +15,16 @@ namespace mtgSimulat
         public int convertedManaCost; //stores the total number of mana needed to play card
         public int atk;               //stores creature attack
         public int def;               //stores the creature def.
+        public bool isTapped;
         public bool isMana()
         {
-            if (cardName == "Land")
+            if (cardType == "mana")
             {
                 return true;
             }
             return false;
         }
+        
 
         public void printCard()
         {
@@ -35,6 +37,9 @@ namespace mtgSimulat
             Console.WriteLine("def: " + def);
         }
         
-
+        public String ToString()
+        {
+            return "name: " + cardName + "," + " type: " + cardType + "," + " mC: " + manaColor + "," + " atk: " + atk + "," + " def " + def + "," + " mana? " + isMana();
+        }
     }
 }

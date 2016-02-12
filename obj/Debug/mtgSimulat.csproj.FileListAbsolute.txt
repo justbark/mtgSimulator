@@ -1,2 +1,7 @@
 c:\users\justin\documents\visual studio 2015\Projects\mtgSimulat\mtgSimulat\bin\Debug\mtgSimulat.exe.config
 C:\Users\Justin\Documents\GitHub\mtgSimulator\bin\Debug\mtgSimulat.exe.config
+C:\Users\Justin\Documents\GitHub\mtgSimulator\bin\Debug\mtgSimulat.exe
+C:\Users\Justin\Documents\GitHub\mtgSimulator\bin\Debug\mtgSimulat.pdb
+C:\Users\Justin\Documents\GitHub\mtgSimulator\obj\Debug\mtgSimulat.csprojResolveAssemblyReference.cache
+C:\Users\Justin\Documents\GitHub\mtgSimulator\obj\Debug\mtgSimulat.exe
+C:\Users\Justin\Documents\GitHub\mtgSimulator\obj\Debug\mtgSimulat.pdb

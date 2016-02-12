@@ -22,8 +22,8 @@ namespace mtgSimulat
         // deffensive players constantly respond to what an opponent is doind (couter decks for example).
         // conservative players play the least amount of cards until they get their win condition.
 
-        public Deck playerDeck;
-        public Hand playerHand;
+        public Deck deck;
+        public Hand hand;
 
         
     }

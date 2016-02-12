@@ -9,8 +9,12 @@ namespace mtgSimulat
     public class Game
     {
         public List<Player> players = new List<Player>();
-        
+        Random rand;
 
+        public Game()
+        {
+            rand = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
+        }
         public void Start()
         {
             //make sure the game is valid
@@ -43,21 +47,20 @@ namespace mtgSimulat
                     //this player goes first because their roll result was higher
                     // this player draws 7
                     p.handSize = 7;
-                    Console.WriteLine("player " + players.IndexOf(p) + "has first turn, drawing 7");
+                    Console.WriteLine("player " + players.IndexOf(p) + " has first turn, drawing 7");
                 }
                 else                  // this player does not have the highest roll amount
                 {
                     p.handSize = 8;      // so this player does not draw seven, they draw 8
-                    Console.WriteLine("player " + players.IndexOf(p) + "did not win the roll, drawing 8");
+                    Console.WriteLine("player " + players.IndexOf(p) + " did not win the roll, drawing 8");
                 }
                 Console.WriteLine("drawing hand for " + players.IndexOf(p));   //trying to display what player is getting a hand. This might be wrong
-                Deck currentDeck = p.playerDeck;
-                Hand currentHand = p.playerHand;
+
                 for (int i = 0; i < p.handSize; i++)     //draw 7 cards from players deck
                 {
-                    Card currentCard = currentDeck.cards[i];   //grab a card from deck
-                    currentHand.hand.Add(currentCard);        // put this card in hand
-                    currentDeck.cards.Remove(currentCard);   // remove this card from player deck
+                    Card currentCard = p.deck.cards[i];   //grab a card from deck
+                    p.hand.cards.Add(currentCard);        // put this card in hand
+                    p.deck.cards.Remove(currentCard);   // remove this card from player deck
                 }
             }
             
@@ -109,7 +112,6 @@ namespace mtgSimulat
         //probably need to roll to figure out what player goes first...
         public void roll(Player p)
         {
-            Random rand = new Random();
             int rollD20 = rand.Next(1, 20);
             p.rollRes = rollD20;
         }
@@ -125,8 +127,8 @@ namespace mtgSimulat
         //=======================================================================
         //Decision stuff
         //=======================================================================
-        List<Decision> generatePhaseDecisions(Player p)
-        {
+        //List<Decision> generatePhaseDecisions(Player p)
+        //{
             // (1) Look at all of our cards, and whatever and
             // find out what we can do for whatever phase we're in
 
@@ -135,6 +137,6 @@ namespace mtgSimulat
             // (3) Add all Decision objects to local list and return the list
 
             // (4) The list of Decision objects will be used later to select from
-        }
+        //}
     }
 }

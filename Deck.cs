@@ -17,5 +17,10 @@ namespace mtgSimulat
                 card.printCard();
             }
         }
+
+        public string ToString()
+        {
+            return "mana: " + this.cards.Where(x => x.cardType == "mana").Count() + "," + " regular: " + this.cards.Where(x => x.cardType == "creature").Count();
+        }
     }
 }

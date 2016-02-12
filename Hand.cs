@@ -8,7 +8,7 @@ namespace mtgSimulat
 {
     public class Hand
     {
-        public List<Card> hand = new List<Card>();
+        public List<Card> cards = new List<Card>();
 
     }
 }
