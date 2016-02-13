@@ -29,7 +29,10 @@ namespace mtgSimulat
                     Shared.game = new Game();
 
                     Player p1 = makeDummyPlayer();
+                    p1.teamId = 0;
+
                     Player p2 = makeDummyPlayer();
+                    p2.teamId = 1;
 
                     Deck d1 = makeDummyDeck();
                     Deck d2 = makeDummyDeck();
@@ -58,6 +61,8 @@ namespace mtgSimulat
             player.aggressiveness = 0.7F;
             player.conservative = 0.1F;
             player.deffensive = 0.2F;
+            player.health = 20;
+            player.infect = 0;
 
             return player;
         }

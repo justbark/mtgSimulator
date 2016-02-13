@@ -18,13 +18,28 @@ namespace mtgSimulat
         public int health;
         public int infect;
 
+        public int teamId;
+
         // agressive players are constantly on the offense. Once an aggressive player gets a card, they play it.
         // deffensive players constantly respond to what an opponent is doind (couter decks for example).
         // conservative players play the least amount of cards until they get their win condition.
-
+        
         public Deck deck;
         public Hand hand;
+        //list battlefield
+        //list graveyard
 
-        
+        public Player()
+        {
+            deck = new Deck();
+            hand = new Hand();
+        }
+
+        public string ToString()
+        {
+            return "agr: " + aggressiveness + "," + " def: " + deffensive + "," + " conserv: " + conservative + "," + " desperate: " + desperation + "," + " handSz: " + handSize + "," +
+                " health: " + health + "," + " infect: " + infect + "," + " team: " + teamId;
+        }
+
     }
 }

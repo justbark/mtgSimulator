@@ -10,5 +10,9 @@ namespace mtgSimulat
     {
         public List<Card> cards = new List<Card>();
 
+        public string ToString()
+        {
+            return "mana: " + this.cards.Where(x => x.cardType == "mana").Count() + "," + " regular: " + this.cards.Where(x => x.cardType == "creature").Count();
+        }
     }
 }
