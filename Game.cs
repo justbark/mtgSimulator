@@ -62,10 +62,26 @@ namespace mtgSimulat
 
                 //need to make sure that the hand is not lacking mana. If it is, draw again...
                 int lands = checkLands(p.hand);
-                if (lands < 2)
+                if (lands >= 2)
+                {
+                    Console.WriteLine("player " + players.IndexOf(p) + " has sufficient land: " + lands);
+                }
+                int redrawCount = 1;
+                while (lands < 2)
                 {
                     Console.WriteLine("player " + players.IndexOf(p) + " did not have enough mana. redrawing");
                     drawHand(p, true);
+                    Console.WriteLine("player " + players.IndexOf(p) + " handsize is: " + p.handSize);
+                    lands = checkLands(p.hand);
+                    redrawCount++;
+                    if (redrawCount >= 4)
+                    {
+                        if (lands != 2)
+                        {
+                            Console.WriteLine("player " + players.IndexOf(p) + " redrew too many times. Sticking with current hand");
+                        }
+                        break;
+                    }
                 }
             }
             
@@ -168,13 +184,11 @@ namespace mtgSimulat
             }
             else
             {
-                //move cards from hand back into library and shuffle...
-                foreach(Card card in p.hand.cards)
-                {
-                    p.deck.cards.Add(card); //add card to library
-                    p.hand.cards.Remove(card); //remove card from hand
-                }
-                shuffleDeck<Card>(p.deck.cards);
+                
+                p.deck.cards.AddRange(p.hand.cards); //add cards from hand to deck
+                p.hand.cards.Clear(); //remove cards from hand
+
+                shuffleDeck<Card>(p.deck.cards); //shuffle
                 p.handSize--; //decrease hand size
                 for (int i = 0; i < p.handSize; i++)     //draw x cards from players deck
                 {
