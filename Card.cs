@@ -6,25 +6,29 @@ using System.Threading.Tasks;
 
 namespace mtgSimulat
 {
+    public enum CardType
+    {
+        Mana,
+        Creature,
+        Instant,
+        Sorcery,
+        Enchantment
+    };
     public class Card
     {
         public string cardName;       //stores the name of the card
         public string manaColor;      //stores the color of mana needed to play card
-        public string cardType;       //stores the type of card (creature, sorcery,etc)
+        public CardType Type;
+        public string type;       //stores the type of card (creature, sorcery,etc)
         public int colorManaCost;     //stores the number of colored mana needed to cast card
         public int convertedManaCost; //stores the total number of mana needed to play card
         public int atk;               //stores creature attack
         public int def;               //stores the creature def.
         public bool isTapped;
-        public bool isMana()
-        {
-            if (cardType == "mana")
-            {
-                return true;
-            }
-            return false;
-        }
-        
+        public bool hasHaste;
+       
+
+        //make an enum for card type.
 
         public void printCard()
         {
