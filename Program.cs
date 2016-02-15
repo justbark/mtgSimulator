@@ -78,8 +78,8 @@ namespace mtgSimulat
 
             Card card = new Card();
             card.cardName = "dummy card";
-            card.cardType = "creature";
-            card.manaColor = "green";
+            card.Type = CardType.Creature;
+            card.manaType = ManaType.green;
             card.atk = randAtk;
             card.def = randDef;
             card.convertedManaCost = randConvertedMana;
@@ -92,8 +92,8 @@ namespace mtgSimulat
         {
             Card card = new Card();
             card.cardName = "Land";
-            card.manaColor = "green";
-            card.cardType = "mana";
+            card.manaType = ManaType.green;
+            card.Type = CardType.Mana;
 
             return card;
         }

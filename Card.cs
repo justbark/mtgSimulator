@@ -14,18 +14,26 @@ namespace mtgSimulat
         Sorcery,
         Enchantment
     };
+    public enum ManaType
+    {
+        black,
+        red,
+        green,
+        blue,
+        white  
+    };
     public class Card
     {
         public string cardName;       //stores the name of the card
-        public string manaColor;      //stores the color of mana needed to play card
+        public ManaType manaType;
         public CardType Type;
         public string type;       //stores the type of card (creature, sorcery,etc)
         public int colorManaCost;     //stores the number of colored mana needed to cast card
         public int convertedManaCost; //stores the total number of mana needed to play card
         public int atk;               //stores creature attack
         public int def;               //stores the creature def.
-        public bool isTapped;
-        public bool hasHaste;
+        public bool isTapped = false;
+        public bool hasHaste = false;
        
 
         //make an enum for card type.
@@ -33,8 +41,8 @@ namespace mtgSimulat
         public void printCard()
         {
             Console.WriteLine(cardName);
-            Console.WriteLine(cardType);
-            Console.WriteLine(manaColor);
+            Console.WriteLine(Type);
+            Console.WriteLine(manaType);
             Console.WriteLine("color of mana: " + colorManaCost);
             Console.WriteLine("Converted mana cost: " + convertedManaCost);
             Console.WriteLine("atk: " + atk);
@@ -43,7 +51,7 @@ namespace mtgSimulat
         
         public String ToString()
         {
-            return "name: " + cardName + "," + " type: " + cardType + "," + " mC: " + manaColor + "," + " atk: " + atk + "," + " def " + def + "," + " mana? " + isMana();
+            return "name: " + cardName + "," + " type: " + Type + "," + " mC: " + manaType + "," + " atk: " + atk + "," + " def " + def;
         }
     }
 }

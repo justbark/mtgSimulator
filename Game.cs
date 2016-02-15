@@ -25,11 +25,12 @@ namespace mtgSimulat
             }
             Console.WriteLine("valid number of players. Beginning game");
 
-
+            //==========================================================================
             //need to figure out who goes first. (first player draws 7, the rest draw 8)
-            foreach (Player p in players)   //each player needs to roll
+            //===========================================================================
+            foreach (Player p in players)   //each player 
             {
-                roll(p);
+                roll(p);   //roll
             }
             int highestRes = 0;            // setting a standard number for each player to check and see if their roll result was higher
             foreach (Player p in players)     // each player compares their roll result
@@ -39,8 +40,10 @@ namespace mtgSimulat
                     highestRes += p.rollRes;     // set the highest result to the player with the highest result
                 }
             }
-            
-            foreach (Player p in players)    //each player now needs to draw a hand
+            //====================================================================
+            //draws a hand
+            //====================================================================
+            foreach (Player p in players) 
             {
                 if (p.rollRes == highestRes)     //if this player has the highest roll result
                 {
@@ -107,6 +110,9 @@ namespace mtgSimulat
             }
         }
 
+        //=========================================================================
+        //is game valid?
+        //=========================================================================
         public bool isValidGame()
         {
             return players.Count() % 2 == 0;
@@ -114,6 +120,9 @@ namespace mtgSimulat
             //if number of players is divisible by 2 return a 1 for true.
         }
 
+        //==========================================================================
+        //check if game has ended
+        //==========================================================================
         public bool isGameEnded()
         {
             foreach (Player p in players)
@@ -126,20 +135,33 @@ namespace mtgSimulat
             return false;
         }
 
+        //===========================================================================
         //add a player object generated in program.cs to list of players
+        //===========================================================================
+        //parameters:
+        //           a player
+        //==========================================================================
         public void AddPlayer(Player currentPlayer)
         {
             players.Add(currentPlayer);
             // add a player to list of players
         }
 
-        //probably need to roll to figure out what player goes first...
+        //=========================================================================
+        //rolls a d20
+        //=========================================================================
+        //parameters:
+        //           a player
+        //=========================================================================
         public void roll(Player p)
         {
             int rollD20 = rand.Next(1, 20);
             p.rollRes = rollD20;
         }
 
+        //==========================================================================
+        //outputs info about the game
+        //==========================================================================
         public string ToString()
         {
             string output = "";
@@ -148,6 +170,12 @@ namespace mtgSimulat
             return output;
         }
 
+        //===========================================================================
+        //shuffles a deck
+        //===========================================================================
+        //parameters:
+        //             a deck (list of cards)
+        //===========================================================================
         public void shuffleDeck<T>(List<T> list)
         {
             int n = list.Count();
@@ -160,13 +188,18 @@ namespace mtgSimulat
                 list[n] = temp;
             }
         }
-
+        //============================================================================
+        //check if there is enough mana in a hand
+        //============================================================================
+        //parameters:
+        //            a hand
+        //============================================================================
         public int checkLands(Hand hand)
         {
             int manaCount = 0;
             foreach (Card card in hand.cards)
             {
-                if (card.cardType == "mana")
+                if (card.Type == CardType.Mana)
                 {
                     manaCount++;
                 }
@@ -174,6 +207,13 @@ namespace mtgSimulat
             return manaCount;
         }
 
+
+        //=============================================================================
+        //Draws a hand
+        //=============================================================================
+        //parameters:
+        //          a player, a boolean (if > first attampt to draw a hand)
+        //==============================================================================
         public void drawHand(Player p, bool secondAttempt)
         {
             if (secondAttempt == false)
@@ -214,23 +254,47 @@ namespace mtgSimulat
         //=======================================================================
         //Decision stuff
         //=======================================================================
+        //parameters:
+        //                   a player
+        //=======================================================================
         List<Decision> generatePhaseSuperDecisions(Player p)
         {
             //-------------------------------------------------------
-            //looks in hand for creatre cards to summon
+            //looks in hand for creature cards to summon
             //-------------------------------------------------------
             foreach (Card card in p.hand.cards)
             {
                 if (card.Type == CardType.Creature && CanAffordToUse(p, card))
                 {
-                    public Decision summonDecision = new Decision();
+                    Decision summonDecision = new Decision();
+                    summonDecision.EncodeSummon(card);
                 }
             }
         }
 
-        public bool CanAffordToUse(p, theCard)
+        //=======================================================================
+        //Check if we can afford to cast this card
+        //=======================================================================
+        //parameters:
+        //             a player, a card
+        //=======================================================================
+        public bool CanAffordToUse(Player p, Card theCard)
         {
+            //counting how much mana is available
+            int convertableMana = 0;
+            Dictionary<ManaType, int> manaDict = new Dictionary<ManaType, int>();
+            //dictionary is a taking 2 arrays and linking them
+            foreach (Card card in p.battleField)
+            {
+                if (card.Type == CardType.Mana && !card.isTapped)
+                {
+                    manaDict[card.manaType]++;
+                    if (card.manaType != theCard.manaType)
+                        convertableMana++;
+                }
 
+            }
+            return (theCard.convertedManaCost < convertableMana && theCard.colorManaCost < manaDict[theCard.manaType]);
         }
     }
 }

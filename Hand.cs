@@ -12,7 +12,7 @@ namespace mtgSimulat
 
         public string ToString()
         {
-            return "mana: " + this.cards.Where(x => x.cardType == "mana").Count() + "," + " regular: " + this.cards.Where(x => x.cardType == "creature").Count();
+            return "mana: " + this.cards.Where(x => x.Type == CardType.Mana).Count() + "," + " regular: " + this.cards.Where(x => x.Type == CardType.Creature).Count();
         }
     }
 }
