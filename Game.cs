@@ -98,7 +98,10 @@ namespace mtgSimulat
                         won = true;
                         break;
                     }
-                    //this is beginning a players turn
+                    //this is beginning a players turn.
+                    //each player has a hand
+                    //now its time for each player to check out their hand and figure out what they need to do.
+                    var decisions = generatePhaseDecisions(p);
 
                 }
             }
@@ -211,16 +214,47 @@ namespace mtgSimulat
         //=======================================================================
         //Decision stuff
         //=======================================================================
-        //List<Decision> generatePhaseDecisions(Player p)
-        //{
+        List<Decision> generatePhaseDecisions(Player p)
+        {
+            //figured i would need to add these lists to make the counting process easier
+            //I will clear these lists after the decision list has been filled
+            List<Decision> decisions = new List<Decision>();
+            List<Card> creaturesInHand = new List<Card>();
+            List<Card> LandInHand = new List<Card>();
+            List<Card> manaInPlay = new List<Card>();
+            List<Card> creaturesInPlay = new List<Card>();
+
             // (1) Look at all of our cards, and whatever and
             // find out what we can do for whatever phase we're in
+            foreach (Card card in p.hand.cards) //look at every card in hand and count what types there are.
+            {
+                if (card.cardType == "mana")
+                    LandInHand.Add(card);
+                if (card.cardType == "creature")
+                    creaturesInHand.Add(card);
+            }
+            //check mana on the battlefield
+            foreach (Card c in p.battleField)
+            {
+                if (c.cardType == "mana")
+                    manaInPlay.Add(c);
+
+                if (c.cardType == "creature")
+                    creaturesInPlay.Add(c);
+            }
+            //check mana amount and if player has played a land. 
+            if (p.hasPlayedManaThisTurn == false && LandInHand.Count >= 1)
+            {
+                //add a land play to list of decisions
+                decisions.Add(); //not sure what im adding...
+            }
+            if (creaturesInHand.Count > 1 && manaInPlay.Count >= //any of minimum amount of mana && theres enough untapped mana )
 
             // (2) Take all possible actions and "encode" them into Decision objects
 
             // (3) Add all Decision objects to local list and return the list
 
             // (4) The list of Decision objects will be used later to select from
-        //}
+        }
     }
 }
