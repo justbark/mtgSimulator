@@ -104,8 +104,26 @@ namespace mtgSimulat
                     //this is beginning a players turn.
                     //each player has a hand
                     //now its time for each player to check out their hand and figure out what they need to do.
+                    int landsInHand = checkLands(p.hand);
+                    if (landsInHand > 0)
+                    {
+                        playLand(p);
+                    }
                     var decisions = generatePhaseSuperDecisions(p);
 
+                }
+            }
+        }
+
+        private void playLand(Player p)
+        {
+            foreach (Card card in p.hand.cards)
+            {
+                if (card.Type == CardType.Mana)
+                {
+                    p.battleField.Add(card);
+                    p.hand.cards.Remove(card);
+                    break;
                 }
             }
         }
@@ -257,10 +275,10 @@ namespace mtgSimulat
         //parameters:
         //                   a player
         //=======================================================================
-        List<Decision> generatePhaseSuperDecisions(Player p)
+        public List<Decision> generatePhaseSuperDecisions(Player p)
         {
             //-------------------------------------------------------
-            //looks in hand for creature cards to summon
+            //looks in hand cards to use
             //-------------------------------------------------------
             foreach (Card card in p.hand.cards)
             {
@@ -268,6 +286,21 @@ namespace mtgSimulat
                 {
                     Decision summonDecision = new Decision();
                     summonDecision.EncodeSummon(card);
+                }
+                if (card.Type == CardType.Enchantment && CanAffordToUse(p, card))
+                {
+                    Decision enchantDecision = new Decision();
+
+                }
+                if (card.Type == CardType.Instant && CanAffordToUse(p, card))
+                {
+                    Decision instantDecision = new Decision();
+
+                }
+                if (card.Type == CardType.Sorcery && CanAffordToUse(p, card))
+                {
+                    Decision sorceryDecision = new Decision();
+
                 }
             }
         }
