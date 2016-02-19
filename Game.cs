@@ -64,7 +64,7 @@ namespace mtgSimulat
                 drawHand(p, false); 
 
                 //need to make sure that the hand is not lacking mana. If it is, draw again...
-                int lands = checkLands(p.hand);
+                int lands = checkLands(p.hand.cards);
                 if (lands >= 2)
                 {
                     Console.WriteLine("player " + players.IndexOf(p) + " has sufficient land: " + lands);
@@ -75,7 +75,7 @@ namespace mtgSimulat
                     Console.WriteLine("player " + players.IndexOf(p) + " did not have enough mana. redrawing");
                     drawHand(p, true);
                     Console.WriteLine("player " + players.IndexOf(p) + " handsize is: " + p.handSize);
-                    lands = checkLands(p.hand);
+                    lands = checkLands(p.hand.cards);
                     redrawCount++;
                     if (redrawCount >= 4)
                     {
@@ -104,12 +104,32 @@ namespace mtgSimulat
                     //this is beginning a players turn.
                     //each player has a hand
                     //now its time for each player to check out their hand and figure out what they need to do.
-                    int landsInHand = checkLands(p.hand);
+                    int landsInHand = checkLands(p.hand.cards);
                     if (landsInHand > 0)
                     {
                         playLand(p);
                     }
-                    var decisions = generatePhaseSuperDecisions(p);
+                    int landsInBattleField = checkLands(p.battleField);
+                    if (landsInBattleField > p.hand.findLowestManaCost())
+                    {
+                        var superDecisions = generatePhaseSuperDecisions(p);
+                        var subDecisions = generatePhaseSubDecisions(superDecisions, p);
+                    }
+                    
+                    
+                    
+                    //call a function that selects best decision
+                    //executeDecision(getBestDecision(subDecisions,p));
+                    //creaate a execute decsion function     bool executeDecision(Decision d)
+                    //in this case d.decisionType == DecisionType.subDecision
+                    //need to then make a Decision getBestDecision(List<Decisions> decisions)
+                    //takes a list picks one at random and gives it back.
+                    //make 3 functions
+                    //generatePhaseSubDecision(var SuperDecision)
+                    //executeDecision(Decision decision)  -----------------get a decision look at what is relvent, what is the tartget, look at atk and def etc
+                    //getBestDecision(list<Decision> subDecisions)----------
+                    
+
 
                 }
             }
@@ -212,12 +232,12 @@ namespace mtgSimulat
         //parameters:
         //            a hand
         //============================================================================
-        public int checkLands(Hand hand)
+        public int checkLands(List<Card> cards)
         {
             int manaCount = 0;
-            foreach (Card card in hand.cards)
+            foreach (Card card in cards)
             {
-                if (card.Type == CardType.Mana)
+                if (card.Type == CardType.Mana && !card.isTapped)
                 {
                     manaCount++;
                 }
@@ -280,29 +300,99 @@ namespace mtgSimulat
             //-------------------------------------------------------
             //looks in hand cards to use
             //-------------------------------------------------------
+            var decisionSet = new List<Decision>();
+            Decision newDecision;
             foreach (Card card in p.hand.cards)
             {
+                newDecision = null;
                 if (card.Type == CardType.Creature && CanAffordToUse(p, card))
                 {
-                    Decision summonDecision = new Decision();
-                    summonDecision.EncodeSummon(card);
+                    newDecision = new Decision();
+                    newDecision.EncodeSummon(card);
                 }
                 if (card.Type == CardType.Enchantment && CanAffordToUse(p, card))
                 {
-                    Decision enchantDecision = new Decision();
-
+                    newDecision = new Decision();
+                    newDecision.EncodeEnchant(card);
                 }
                 if (card.Type == CardType.Instant && CanAffordToUse(p, card))
                 {
-                    Decision instantDecision = new Decision();
-
+                    newDecision = new Decision();
+                    newDecision.EncodeAttack(card);
                 }
                 if (card.Type == CardType.Sorcery && CanAffordToUse(p, card))
                 {
-                    Decision sorceryDecision = new Decision();
-
+                    //newDecision = new Decision();
+                    //newDecision.
                 }
+                decisionSet.Add(newDecision);
             }
+            return decisionSet;
+        }
+
+        //=======================================================================
+        //generates sub decisions
+        //=======================================================================
+        //parameters:
+        //             list of super decisions
+        //=======================================================================
+        public List<Decision> generatePhaseSubDecisions(List<Decision> superDecisions, Player player)
+        {
+            var subDecisionsSet = new List<Decision>();
+            Decision subDecision;
+            foreach(Decision d in superDecisions)
+            {
+                subDecision = null;
+                if (d.actionType == ActionDecisionType.Summon)
+                {
+                    subDecision = new Decision();
+                    subDecision.Type = DecisionType.Sub;
+                    //this one will summon a creature onto the battlefield. There are no targets
+                }
+                if (d.actionType == ActionDecisionType.Attack)
+                {
+                    subDecision = new Decision();
+                    subDecision.Type = DecisionType.Sub;
+                    subDecision.targetPlayer = players.Where(x => x.teamId != player.teamId).First();
+                    //choose the first player that does not have the same team ID as current player
+                }
+                if (d.actionType == ActionDecisionType.CastEnchantment)
+                {
+                    subDecision = new Decision();
+                    subDecision.Type = DecisionType.Sub;
+                    subDecision.targetCard = player.battleField.Where(x => x.Type == CardType.Creature).First();
+                    //choose the first creature card to enchant. This is not a good way to do this, but for now it will work.
+                }
+                if (d.actionType == ActionDecisionType.CastInstant)
+                {
+                    subDecision = new Decision();
+                    subDecision.Type = DecisionType.Sub;
+                }
+                if (d.actionType == ActionDecisionType.CastSorcerie)
+                {
+                    subDecision = new Decision();
+                    subDecision.Type = DecisionType.Sub;
+                }
+                if (d.actionType == ActionDecisionType.Defend)
+                {
+                    subDecision = new Decision();
+                    subDecision.Type = DecisionType.Sub;
+                }
+                subDecisionsSet.Add(subDecision);
+            }
+            return subDecisionsSet;
+            //take it apart and split it into a bunch of sub decisions
+            //this will be structured very similarly to generte phase super decisions
+            //you are going to have to investigate a bunch of different possibilities
+            //of what this can be constrewed into
+            //for each superdecision i would try to figure out a way to create all the sub decisions needed for each combination of how to atk target card possible
+            //just some side reading but heres the math that is driving this function
+            //http://betterexplained.com/articles/easy-permutations-and-combinations/
+            //knowing the properties of these exuations is good
+            //what we want to midigate the damage of in this is a 
+            //combinatorial explosion
+            //so we have to trim these decisions or at least the variabels
+
         }
 
         //=======================================================================

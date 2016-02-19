@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace mtgSimulat
 {
-    public enum SuperDecisionType
+    public enum ActionDecisionType
     {
         Summon, //summon a creature
         Attack, //attack with an existing creature
@@ -15,31 +15,48 @@ namespace mtgSimulat
         CastEnchantment,
         Defend
     };
+    public enum DecisionType
+    {
+        Sub,
+        Super
+    };
     public class Decision
     {
-        public SuperDecisionType Type;
+        public ActionDecisionType actionType;
         private List<Card> RelevantCards;
-        private Player targetPlayer;
+        public Player targetPlayer;
+        public Card targetCard; //for enchantments or instants
+        public DecisionType Type;
 
         public void EncodeSummon(Card card)
         {
             RelevantCards.Add(card);
-            this.Type = SuperDecisionType.Summon;
+            this.actionType = ActionDecisionType.Summon;
         }
         public void EncodeSummon(List<Card> cards) //overloaded function!
         {
             RelevantCards.AddRange(cards);
-            this.Type = SuperDecisionType.Summon;
+            this.actionType = ActionDecisionType.Summon;
         }
         public void EncodeAttack(Card card)
         {
             RelevantCards.Add(card);
-            this.Type = SuperDecisionType.Attack;
+            this.actionType = ActionDecisionType.Attack;
         }
         public void EncodeAttack(List<Card> cards) //overloaded function!
         {
             RelevantCards.AddRange(cards);
-            this.Type = SuperDecisionType.Attack;
+            this.actionType = ActionDecisionType.Attack;
+        }
+        public void EncodeEnchant(Card card)
+        {
+            RelevantCards.Add(card);
+            this.actionType = ActionDecisionType.CastEnchantment;
+        }
+        public void EncodeEnchant(List<Card> cards)
+        {
+            RelevantCards.AddRange(cards);
+            this.actionType = ActionDecisionType.CastEnchantment;
         }
     }
 }

@@ -14,5 +14,18 @@ namespace mtgSimulat
         {
             return "mana: " + this.cards.Where(x => x.Type == CardType.Mana).Count() + "," + " regular: " + this.cards.Where(x => x.Type == CardType.Creature).Count();
         }
+
+        public int findLowestManaCost()
+        {
+            int lowestMana = 10;
+            foreach(Card card in cards)
+            {
+                if (card.convertedManaCost < lowestMana)
+                {
+                    lowestMana--;
+                }
+            }
+            return lowestMana;
+        }
     }
 }
