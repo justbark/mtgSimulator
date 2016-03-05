@@ -20,10 +20,7 @@ namespace mtgSimulat
             int lowestMana = 10;
             foreach(Card card in cards)
             {
-                if (card.convertedManaCost < lowestMana)
-                {
-                    lowestMana--;
-                }
+                lowestMana = card.convertedManaCost < lowestMana ? card.convertedManaCost : lowestMana;
             }
             return lowestMana;
         }

@@ -124,20 +124,9 @@ namespace mtgSimulat
                             {
                                 var superDecisions = generatePhaseSuperDecisions(p);
                                 var subDecisions = generatePhaseSubDecisions(superDecisions, p);
+                                executeDecision(getBestDecision(subDecisions, p));
                             }
 
-
-
-                            //call a function that selects best decision
-                            //executeDecision(getBestDecision(subDecisions,p));
-                            //creaate a execute decsion function     bool executeDecision(Decision d)
-                            //in this case d.decisionType == DecisionType.subDecision
-                            //need to then make a Decision getBestDecision(List<Decisions> decisions)
-                            //takes a list picks one at random and gives it back.
-                            //make 3 functions
-                            //generatePhaseSubDecision(var SuperDecision)
-                            //executeDecision(Decision decision)  -----------------get a decision look at what is relvent, what is the tartget, look at atk and def etc
-                            //getBestDecision(list<Decision> subDecisions)----------
                         }
                     }
                     turnID++;
@@ -367,6 +356,8 @@ namespace mtgSimulat
                     subDecision.Type = DecisionType.Sub;
                     subDecision.targetPlayer = players.Where(x => x.teamId != player.teamId).First();
                     //choose the first player that does not have the same team ID as current player
+                    subDecision.EncodeAttack(d.RelevantCards);
+                    Console.WriteLine("encoded attack subdecision");
                 }
                 if (d.actionType == ActionDecisionType.CastEnchantment)
                 {
@@ -430,6 +421,52 @@ namespace mtgSimulat
 
             }
             return (theCard.convertedManaCost < convertableMana && theCard.colorManaCost < manaDict[theCard.manaType]);
+        }
+
+        /// <summary>
+        /// executes the best decision
+        /// </summary>
+        /// <param name="currentDecision"></param>
+        public void executeDecision (Decision currentDecision)
+        {
+            //if decision is an attack type
+            if (currentDecision.actionType == ActionDecisionType.Attack)
+            {
+                Console.WriteLine("decisionType = attack");
+                int totalDmg = currentDecision.RelevantCards.Sum(item => item.atk);
+                mutateHealth(totalDmg, currentDecision.targetPlayer.teamId);
+                //FIXMEopponent needs to decide if its going to block. If so it needs to decide with what creatures
+                //if opponent doesnt want to block, it needs to take the dmg
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="decisions"></param>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public Decision getBestDecision (List<Decision> decisions, Player p)
+        {
+            //To do the documentiation thing above do "///" and press enter
+            //eventually we will use a utility function based on the player
+            //double check the range to make sure I am recovering all decisions
+            //FIXME
+            int randDecision = rand.Next(1, decisions.Count() - 1);
+            Console.WriteLine("picked index " + randDecision + " out of " + (decisions.Count() - 1));
+            return decisions[randDecision];
+        }
+
+
+        public void mutateHealth(int healthDelta, int teamID)
+        {
+            Console.WriteLine("doing " + healthDelta + " dmg to team " + teamID);
+            foreach(Player p in players)
+            {
+                if (p.teamId == teamID)
+                {
+                    p.health -= healthDelta;
+                }
+            }
         }
     }
 }
