@@ -122,9 +122,14 @@ namespace mtgSimulat
                             int landsInBattleField = checkLands(p.battleField);
                             if (landsInBattleField > p.hand.findLowestManaCost())
                             {
+                                Console.WriteLine("there is enough land on the battlefield, generating decisions");
                                 var superDecisions = generatePhaseSuperDecisions(p);
                                 var subDecisions = generatePhaseSubDecisions(superDecisions, p);
                                 executeDecision(getBestDecision(subDecisions, p));
+                            }
+                            else
+                            {
+                                Console.WriteLine("not enough mana available to do anything");
                             }
 
                         }
@@ -409,6 +414,11 @@ namespace mtgSimulat
             //counting how much mana is available
             int convertableMana = 0;
             Dictionary<ManaType, int> manaDict = new Dictionary<ManaType, int>();
+            manaDict[ManaType.red]=0;
+            manaDict[ManaType.black]=0;
+            manaDict[ManaType.blue] = 0;
+            manaDict[ManaType.green] = 0;
+            manaDict[ManaType.white] = 0;
             //dictionary is a taking 2 arrays and linking them
             foreach (Card card in p.battleField)
             {

@@ -1,0 +1,6 @@
+C:\Users\Justin\Documents\GitHub\mtgSimulator\bin\Release\mtgSimulat.exe.config
+C:\Users\Justin\Documents\GitHub\mtgSimulator\bin\Release\mtgSimulat.exe
+C:\Users\Justin\Documents\GitHub\mtgSimulator\bin\Release\mtgSimulat.pdb
+C:\Users\Justin\Documents\GitHub\mtgSimulator\obj\Release\mtgSimulat.csprojResolveAssemblyReference.cache
+C:\Users\Justin\Documents\GitHub\mtgSimulator\obj\Release\mtgSimulat.exe
+C:\Users\Justin\Documents\GitHub\mtgSimulator\obj\Release\mtgSimulat.pdb
