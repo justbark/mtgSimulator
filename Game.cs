@@ -10,6 +10,7 @@ namespace mtgSimulat
     {
         public List<Player> players = new List<Player>();
         Random rand;
+        int turnID;
 
         public Game()
         {
@@ -87,50 +88,60 @@ namespace mtgSimulat
                     }
                 }
             }
-            
+
 
 
             //check and see if this game is started.
+            turnID = 0;
             bool won = false;
+            var teamIDs = players.Select(x => x.teamId).Distinct().ToList();
             while (won == false)
             {
-                foreach (Player p in players)
+                for (int i = 0; i < teamIDs.Count(); i++)
                 {
-                    if (this.isGameEnded())
+                    Console.WriteLine("teamIDs: " + teamIDs[i] + "," + " turn id = " + turnID);
+                    foreach (Player p in players)
                     {
-                        won = true;
-                        break;
-                    }
-                    //this is beginning a players turn.
-                    //each player has a hand
-                    //now its time for each player to check out their hand and figure out what they need to do.
-                    int landsInHand = checkLands(p.hand.cards);
-                    if (landsInHand > 0)
-                    {
-                        playLand(p);
-                    }
-                    int landsInBattleField = checkLands(p.battleField);
-                    if (landsInBattleField > p.hand.findLowestManaCost())
-                    {
-                        var superDecisions = generatePhaseSuperDecisions(p);
-                        var subDecisions = generatePhaseSubDecisions(superDecisions, p);
-                    }
-                    
-                    
-                    
-                    //call a function that selects best decision
-                    //executeDecision(getBestDecision(subDecisions,p));
-                    //creaate a execute decsion function     bool executeDecision(Decision d)
-                    //in this case d.decisionType == DecisionType.subDecision
-                    //need to then make a Decision getBestDecision(List<Decisions> decisions)
-                    //takes a list picks one at random and gives it back.
-                    //make 3 functions
-                    //generatePhaseSubDecision(var SuperDecision)
-                    //executeDecision(Decision decision)  -----------------get a decision look at what is relvent, what is the tartget, look at atk and def etc
-                    //getBestDecision(list<Decision> subDecisions)----------
-                    
+                        if (p.teamId == teamIDs[i])
+                        {
+                            Console.WriteLine("\tplayer: " + p.playerId);
+                            //TODO: make sure that this works for teams sizes 1 and above.
+                            if (this.isGameEnded())
+                            {
+                                won = true;
+                                break;
+                            }
+                            //this is beginning a players turn.
+                            //each player has a hand
+                            //now its time for each player to check out their hand and figure out what they need to do.
+                            int landsInHand = checkLands(p.hand.cards);
+                            if (landsInHand > 0)
+                            {
+                                playLand(p);
+                            }
+                            int landsInBattleField = checkLands(p.battleField);
+                            if (landsInBattleField > p.hand.findLowestManaCost())
+                            {
+                                var superDecisions = generatePhaseSuperDecisions(p);
+                                var subDecisions = generatePhaseSubDecisions(superDecisions, p);
+                            }
 
 
+
+                            //call a function that selects best decision
+                            //executeDecision(getBestDecision(subDecisions,p));
+                            //creaate a execute decsion function     bool executeDecision(Decision d)
+                            //in this case d.decisionType == DecisionType.subDecision
+                            //need to then make a Decision getBestDecision(List<Decisions> decisions)
+                            //takes a list picks one at random and gives it back.
+                            //make 3 functions
+                            //generatePhaseSubDecision(var SuperDecision)
+                            //executeDecision(Decision decision)  -----------------get a decision look at what is relvent, what is the tartget, look at atk and def etc
+                            //getBestDecision(list<Decision> subDecisions)----------
+                        }
+                    }
+                    turnID++;
+                    Console.WriteLine("turn: " + turnID);
                 }
             }
         }
@@ -181,6 +192,7 @@ namespace mtgSimulat
         //==========================================================================
         public void AddPlayer(Player currentPlayer)
         {
+            currentPlayer.playerId = players.Count();
             players.Add(currentPlayer);
             // add a player to list of players
         }

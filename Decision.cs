@@ -27,6 +27,7 @@ namespace mtgSimulat
         public Player targetPlayer;
         public Card targetCard; //for enchantments or instants
         public DecisionType Type;
+        public int turn;
 
         public void EncodeSummon(Card card)
         {
