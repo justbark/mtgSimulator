@@ -30,6 +30,7 @@ namespace mtgSimulat
         public string type;       //stores the type of card (creature, sorcery,etc)
         public int colorManaCost;     //stores the number of colored mana needed to cast card
         public int convertedManaCost; //stores the total number of mana needed to play card
+        public int colorlessManaCost;     // total number of mana needed to play the card
         public int atk;               //stores creature attack
         public int def;               //stores the creature def.
         public bool isTapped = false;
@@ -51,7 +52,7 @@ namespace mtgSimulat
         
         public String ToString()
         {
-            return "name: " + cardName + "," + " type: " + Type + "," + " mC: " + manaType + "," + " atk: " + atk + "," + " def " + def;
+            return "name: " + cardName + "," + " type: " + Type + "," + " mC: " + manaType + "," + " Colorcost: " + colorManaCost + "," + " colorless: " + colorlessManaCost + "," + " converted: " + convertedManaCost + "," + " atk: " + atk + "," + " def " + def;
         }
     }
 }

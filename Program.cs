@@ -73,8 +73,8 @@ namespace mtgSimulat
             
             int randAtk = Shared.rand.Next(1, 5);
             int randDef = Shared.rand.Next(1, 5);
-            int randConvertedMana = Shared.rand.Next(1, 4);
-            int randColorCost = Shared.rand.Next(1, 4);
+            int randTotalMana = Shared.rand.Next(1, 4);
+            int randColorCost = Shared.rand.Next(1, 3);
 
             Card card = new Card();
             card.cardName = "dummy card";
@@ -82,8 +82,15 @@ namespace mtgSimulat
             card.manaType = ManaType.green;
             card.atk = randAtk;
             card.def = randDef;
-            card.convertedManaCost = randConvertedMana;
-            card.colorManaCost = randColorCost;
+            card.convertedManaCost = randTotalMana;   //converted mana cost is the total number of mana
+            card.colorManaCost = randColorCost;       //this can be a random number
+            if (card.colorManaCost > card.convertedManaCost)
+            {
+                card.colorlessManaCost = 0;
+                card.convertedManaCost = card.colorManaCost;
+                return card;
+            }
+            card.colorlessManaCost = card.convertedManaCost - card.colorManaCost;   //to figure out the colorless mana cost we need to subtract converted mana cost from color cost
 
             return card;
             
