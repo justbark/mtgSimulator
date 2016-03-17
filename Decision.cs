@@ -23,7 +23,7 @@ namespace mtgSimulat
     public class Decision
     {
         public ActionDecisionType actionType;
-        public List<Card> RelevantCards;
+        public List<Card> RelevantCards = new List<Card>();
         public Player targetPlayer;
         public Card targetCard; //for enchantments or instants
         public DecisionType Type;

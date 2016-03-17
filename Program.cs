@@ -10,6 +10,18 @@ namespace mtgSimulat
     {
         public static Game game;
         public static Random rand;
+        public static int debugLevel = 4; //0, 1, 2, 3
+        private static System.IO.StreamWriter file;
+        static string logFileNameString = "C:\\Users\\Justin\\Desktop\\gamelog.txt";
+
+        static Shared()
+        {
+            System.IO.File.WriteAllText(logFileNameString, "");
+            Shared.file =
+            new System.IO.StreamWriter(logFileNameString);
+        }
+
+        public static string dwr(int severity, string msg) { if (severity > Shared.debugLevel) { return msg; } Console.WriteLine(msg); Shared.file.WriteLine(msg); return msg; }
     }
 
     class Program

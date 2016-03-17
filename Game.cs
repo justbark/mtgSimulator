@@ -21,10 +21,12 @@ namespace mtgSimulat
             //make sure the game is valid
             if (!isValidGame())
             {
-                Console.WriteLine("not a valid number of players");
+                //Console.WriteLine("not a valid number of players");
+                Shared.dwr(1, "not a valid number of players");
                 return;
             }
-            Console.WriteLine("valid number of players. Beginning game");
+            //Console.WriteLine("valid number of players. Beginning game");
+            Shared.dwr(3, "Valid number of players. Beginning game");
 
             //==========================================================================
             //need to figure out who goes first. (first player draws 7, the rest draw 8)
@@ -331,7 +333,8 @@ namespace mtgSimulat
                     //newDecision = new Decision();
                     //newDecision.
                 }
-                decisionSet.Add(newDecision);
+                if(newDecision != null)
+                   decisionSet.Add(newDecision);
             }
             return decisionSet;
         }
@@ -353,6 +356,7 @@ namespace mtgSimulat
                 {
                     subDecision = new Decision();
                     subDecision.Type = DecisionType.Sub;
+                    Console.WriteLine("encoded summon sub decision");
                     //this one will summon a creature onto the battlefield. There are no targets
                 }
                 if (d.actionType == ActionDecisionType.Attack)
@@ -413,6 +417,7 @@ namespace mtgSimulat
         {
             //counting how much mana is available
             int convertableMana = 0;
+            int cardColorEncountered = 0;
             Dictionary<ManaType, int> manaDict = new Dictionary<ManaType, int>();
             manaDict[ManaType.red]=0;
             manaDict[ManaType.black]=0;
@@ -427,10 +432,17 @@ namespace mtgSimulat
                     manaDict[card.manaType]++;
                     if (card.manaType != theCard.manaType)
                         convertableMana++;
+                    else
+                    {
+                        if (cardColorEncountered >= theCard.colorManaCost)
+                        {
+                            convertableMana++;
+                        }
+                        cardColorEncountered++;
+                    }
                 }
-
             }
-            return (theCard.convertedManaCost < convertableMana && theCard.colorManaCost < manaDict[theCard.manaType]);
+            return (theCard.colorlessManaCost <= convertableMana && theCard.colorManaCost <= manaDict[theCard.manaType]);
         }
 
         /// <summary>
@@ -461,7 +473,7 @@ namespace mtgSimulat
             //eventually we will use a utility function based on the player
             //double check the range to make sure I am recovering all decisions
             //FIXME
-            int randDecision = rand.Next(1, decisions.Count() - 1);
+            int randDecision = rand.Next(0, decisions.Count() - 1);
             Console.WriteLine("picked index " + randDecision + " out of " + (decisions.Count() - 1));
             return decisions[randDecision];
         }
