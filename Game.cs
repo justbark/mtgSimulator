@@ -53,38 +53,46 @@ namespace mtgSimulat
                     //this player goes first because their roll result was higher
                     // this player draws 7
                     p.handSize = 7;
-                    Console.WriteLine("player " + players.IndexOf(p) + " has first turn, drawing 7");
+                    //Console.WriteLine("player " + players.IndexOf(p) + " has first turn, drawing 7");
+                    Shared.dwr(3, "player " + players.IndexOf(p) + " has first turn, drawing 7");
                 }
                 else                  // this player does not have the highest roll amount
                 {
                     p.handSize = 8;      // so this player does not draw seven, they draw 8
-                    Console.WriteLine("player " + players.IndexOf(p) + " did not win the roll, drawing 8");
+                    //Console.WriteLine("player " + players.IndexOf(p) + " did not win the roll, drawing 8");
+                    Shared.dwr(3, "player " + players.IndexOf(p) + " did not win the roll, drawing 8");
                 }
-                Console.WriteLine("shuffeling deck for player " + players.IndexOf(p));
+                //Console.WriteLine("shuffeling deck for player " + players.IndexOf(p));
+                Shared.dwr(3, "shuffeling deck for player " + players.IndexOf(p));
                 shuffleDeck<Card>(p.deck.cards);//need to shuffle deck so the hand is not creature heavy
 
-                Console.WriteLine("drawing hand for " + players.IndexOf(p));   //trying to display what player is getting a hand. This might be wrong
+                //Console.WriteLine("drawing hand for " + players.IndexOf(p));   //trying to display what player is getting a hand. This might be wrong
+                Shared.dwr(3, "drawing hand for " + players.IndexOf(p));
                 drawHand(p, false); 
 
                 //need to make sure that the hand is not lacking mana. If it is, draw again...
                 int lands = checkLands(p.hand.cards);
                 if (lands >= 2)
                 {
-                    Console.WriteLine("player " + players.IndexOf(p) + " has sufficient land: " + lands);
+                    //Console.WriteLine("player " + players.IndexOf(p) + " has sufficient land: " + lands);
+                    Shared.dwr(3, "player " + players.IndexOf(p) + " has sufficient land: " + lands);
                 }
                 int redrawCount = 1;
                 while (lands < 2)
                 {
-                    Console.WriteLine("player " + players.IndexOf(p) + " did not have enough mana. redrawing");
+                    //Console.WriteLine("player " + players.IndexOf(p) + " did not have enough mana. redrawing");
+                    Shared.dwr(3, "player " + players.IndexOf(p) + " did not have enough mana. redrawing");
                     drawHand(p, true);
-                    Console.WriteLine("player " + players.IndexOf(p) + " handsize is: " + p.handSize);
+                    //Console.WriteLine("player " + players.IndexOf(p) + " handsize is: " + p.handSize);
+                    Shared.dwr(3, "player " + players.IndexOf(p) + " handsize is: " + p.handSize);
                     lands = checkLands(p.hand.cards);
                     redrawCount++;
                     if (redrawCount >= 4)
                     {
                         if (lands != 2)
                         {
-                            Console.WriteLine("player " + players.IndexOf(p) + " redrew too many times. Sticking with current hand");
+                            //Console.WriteLine("player " + players.IndexOf(p) + " redrew too many times. Sticking with current hand");
+                            Shared.dwr(3, "player " + players.IndexOf(p) + " redrew too many times. Sticking with current hand");
                         }
                         break;
                     }
@@ -101,12 +109,14 @@ namespace mtgSimulat
             {
                 for (int i = 0; i < teamIDs.Count(); i++)
                 {
-                    Console.WriteLine("teamIDs: " + teamIDs[i] + "," + " turn id = " + turnID);
+                    //Console.WriteLine("teamIDs: " + teamIDs[i] + "," + " turn id = " + turnID);
+                    Shared.dwr(3, "teamIDs: " + teamIDs[i] + "," + " turn id = " + turnID);
                     foreach (Player p in players)
                     {
                         if (p.teamId == teamIDs[i])
                         {
-                            Console.WriteLine("\tplayer: " + p.playerId);
+                            //Console.WriteLine("\tplayer: " + p.playerId);
+                            Shared.dwr(3, "\tplayer: " + p.playerId);
                             //TODO: make sure that this works for teams sizes 1 and above.
                             if (this.isGameEnded())
                             {
@@ -124,20 +134,23 @@ namespace mtgSimulat
                             int landsInBattleField = checkLands(p.battleField);
                             if (landsInBattleField > p.hand.findLowestManaCost())
                             {
-                                Console.WriteLine("there is enough land on the battlefield, generating decisions");
+                                //Console.WriteLine("there is enough land on the battlefield, generating decisions");
+                                Shared.dwr(3, "there is enough land on the battlefield, generating decisions");
                                 var superDecisions = generatePhaseSuperDecisions(p);
                                 var subDecisions = generatePhaseSubDecisions(superDecisions, p);
                                 executeDecision(getBestDecision(subDecisions, p));
                             }
                             else
                             {
-                                Console.WriteLine("not enough mana available to do anything");
+                                //Console.WriteLine("not enough mana available to do anything");
+                                Shared.dwr(3, "not enough mana available to do anything");
                             }
 
                         }
                     }
                     turnID++;
-                    Console.WriteLine("turn: " + turnID);
+                    //Console.WriteLine("turn: " + turnID);
+                    Shared.dwr(3, "turn: " + turnID);
                 }
             }
         }
@@ -356,7 +369,8 @@ namespace mtgSimulat
                 {
                     subDecision = new Decision();
                     subDecision.Type = DecisionType.Sub;
-                    Console.WriteLine("encoded summon sub decision");
+                    //Console.WriteLine("encoded summon sub decision");
+                    Shared.dwr(3, "encoded summon sub decision");
                     //this one will summon a creature onto the battlefield. There are no targets
                 }
                 if (d.actionType == ActionDecisionType.Attack)
@@ -366,7 +380,8 @@ namespace mtgSimulat
                     subDecision.targetPlayer = players.Where(x => x.teamId != player.teamId).First();
                     //choose the first player that does not have the same team ID as current player
                     subDecision.EncodeAttack(d.RelevantCards);
-                    Console.WriteLine("encoded attack subdecision");
+                    //Console.WriteLine("encoded attack subdecision");
+                    Shared.dwr(3, "encoded attack subdecision");
                 }
                 if (d.actionType == ActionDecisionType.CastEnchantment)
                 {
@@ -454,7 +469,8 @@ namespace mtgSimulat
             //if decision is an attack type
             if (currentDecision.actionType == ActionDecisionType.Attack)
             {
-                Console.WriteLine("decisionType = attack");
+                //Console.WriteLine("decisionType = attack");
+                Shared.dwr(3, "decisionType = attack");
                 int totalDmg = currentDecision.RelevantCards.Sum(item => item.atk);
                 mutateHealth(totalDmg, currentDecision.targetPlayer.teamId);
                 //FIXMEopponent needs to decide if its going to block. If so it needs to decide with what creatures
@@ -474,15 +490,17 @@ namespace mtgSimulat
             //double check the range to make sure I am recovering all decisions
             //FIXME
             int randDecision = rand.Next(0, decisions.Count() - 1);
-            Console.WriteLine("picked index " + randDecision + " out of " + (decisions.Count() - 1));
+            //Console.WriteLine("picked index " + randDecision + " out of " + (decisions.Count() - 1));
+            Shared.dwr(3, "picked index " + randDecision + " out of " + (decisions.Count() - 1));
             return decisions[randDecision];
         }
 
 
         public void mutateHealth(int healthDelta, int teamID)
         {
-            Console.WriteLine("doing " + healthDelta + " dmg to team " + teamID);
-            foreach(Player p in players)
+            //Console.WriteLine("doing " + healthDelta + " dmg to team " + teamID);
+            Shared.dwr(3, "doing " + healthDelta + " dmg to team " + teamID);
+            foreach (Player p in players)
             {
                 if (p.teamId == teamID)
                 {
