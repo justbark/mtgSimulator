@@ -10,18 +10,36 @@ namespace mtgSimulat
     {
         public static Game game;
         public static Random rand;
-        public static int debugLevel = 4; //0, 1, 2, 3
-        private static System.IO.StreamWriter file;
-        static string logFileNameString = "C:\\Users\\Justin\\Desktop\\gamelog.txt";
+        public static int debugLevel = 1; //0, 1, 2, 3
+        public static System.IO.StreamWriter file;
+        public static string logFileNameString = "C:\\Users\\Justin\\Desktop\\gamelog5.txt";
 
         static Shared()
         {
+            debugLevel = 4;
+            AppDomain.CurrentDomain.ProcessExit += StaticClass_Dtor; //adds a destructor to a static class
             System.IO.File.WriteAllText(logFileNameString, "");
-            Shared.file =
-            new System.IO.StreamWriter(logFileNameString);
+            Shared.file = new System.IO.StreamWriter(logFileNameString);
+            Shared.file.WriteLine("Decolatage");
+            dwr(0, "Static constructor");
+        }
+        static void StaticClass_Dtor(object sender, EventArgs e)
+        {
+            // clean it up
+            Shared.file.WriteLine("shutting down");
+            Shared.file.Close();
         }
 
-        public static string dwr(int severity, string msg) { if (severity > Shared.debugLevel) { return msg; } Console.WriteLine(msg); Shared.file.WriteLine(msg); return msg; }
+        public static string dwr(int severity, string msg)
+        {
+            if (severity > Shared.debugLevel)
+            {
+                return msg;
+            }
+            Console.WriteLine(msg);
+            Shared.file.WriteLine(msg);
+            return msg;
+        }
     }
 
     class Program
@@ -38,6 +56,13 @@ namespace mtgSimulat
                 line = Console.ReadLine(); //wait for text to generate all sentences file
                 if (line == "start")
                 {
+                    /*//System.IO.File.WriteAllText(Shared.logFileNameString, "");
+                    Shared.file = new System.IO.StreamWriter(Shared.logFileNameString);
+                    Shared.file.WriteLine("Decolatage");
+                    Shared.file.Close();
+
+                    System.Environment.Exit(1);*/
+
                     Shared.game = new Game();
 
                     Player p1 = makeDummyPlayer();

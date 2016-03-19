@@ -138,7 +138,8 @@ namespace mtgSimulat
                                 Shared.dwr(3, "there is enough land on the battlefield, generating decisions");
                                 var superDecisions = generatePhaseSuperDecisions(p);
                                 var subDecisions = generatePhaseSubDecisions(superDecisions, p);
-                                executeDecision(getBestDecision(subDecisions, p));
+                                if (subDecisions.Count > 0)
+                                   executeDecision(getBestDecision(subDecisions, p));
                             }
                             else
                             {
