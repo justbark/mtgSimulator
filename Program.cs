@@ -12,7 +12,7 @@ namespace mtgSimulat
         public static Random rand;
         public static int debugLevel = 1; //0, 1, 2, 3
         public static System.IO.StreamWriter file;
-        public static string logFileNameString = "C:\\Users\\Justin\\Desktop\\gamelog5.txt";
+        public static string logFileNameString = "C:\\Users\\Owner\\Desktop\\gamelog5.txt";
 
         static Shared()
         {
@@ -20,7 +20,7 @@ namespace mtgSimulat
             AppDomain.CurrentDomain.ProcessExit += StaticClass_Dtor; //adds a destructor to a static class
             System.IO.File.WriteAllText(logFileNameString, "");
             Shared.file = new System.IO.StreamWriter(logFileNameString);
-            Shared.file.WriteLine("Decolatage");
+            Shared.file.WriteLine("BEGIN MTG GAME");
             dwr(0, "Static constructor");
         }
         static void StaticClass_Dtor(object sender, EventArgs e)
